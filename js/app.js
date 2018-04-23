@@ -1,6 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
+const deck = document.querySelector('.deck');
 const cards = document.querySelectorAll('.card');
 
 const diamond = "fa fa-diamond";
