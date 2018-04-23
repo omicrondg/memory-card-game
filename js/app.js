@@ -29,9 +29,11 @@ function fillCards(){
 
     for(let e = 0; e < cards.length; e++){
         let i = document.createElement('i');
-        i.setAttribute("class", `${shuffledCards[e]}`)
+        i.setAttribute("class", `${shuffledCards[e]}`);
         cards[e].appendChild(i);
     }
+
+    cards.forEach(e => e.addEventListener('click', clickCard));
 }
 
 function clearDesc(){
@@ -66,21 +68,21 @@ function shuffle(array) {
  */
 let openedCards = [];
 
-deck.addEventListener('click', event => {
+function clickCard(event) {
     let selectedCard = event.target;
     showCard(selectedCard);
     addToOpenList(selectedCard);
 
     if (openedCards.length !== 0 && openedCards.length > 1) {
-        let first = openedCards[0].firstElementChild.getAttribute('class');
-        let next = openedCards[1].firstElementChild.getAttribute('class');
-      
-        if (first === next) cardsMatched(openedCards[0], openedCards[1]);
-        else cardsUnmatched();
+        let card_1 = openedCards[0].firstElementChild.getAttribute('class');
+        let card_2 = openedCards[1].firstElementChild.getAttribute('class');
+
+        if (card_1 === card_2) cardsMatched(openedCards[0], openedCards[1]);
+        else cardsUnmatched(openedCards[0], openedCards[1]);
 
         
     }
-})
+}
 
 function showCard(selectedCard) {
     selectedCard.setAttribute('class', 'card show open');
@@ -93,7 +95,9 @@ function addToOpenList(selectedCard) {
 
 function cardsMatched(card_1, card_2){
     card_1.setAttribute('class', 'card show open match');
+    card_1.removeEventListener('click', clickCard);
     card_2.setAttribute('class', 'card show open match');
+    card_2.removeEventListener('click', clickCard);
     openedCards = [];
 }
 
