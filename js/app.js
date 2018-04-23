@@ -70,6 +70,16 @@ deck.addEventListener('click', event => {
     let selectedCard = event.target;
     showCard(selectedCard);
     addToOpenList(selectedCard);
+
+    if (openedCards.length !== 0 && openedCards.length > 1) {
+        let first = openedCards[0].firstElementChild.getAttribute('class');
+        let next = openedCards[1].firstElementChild.getAttribute('class');
+      
+        if (first === next) cardsMatched(openedCards[0], openedCards[1]);
+        else cardsUnmatched();
+
+        
+    }
 })
 
 function showCard(selectedCard) {
@@ -79,4 +89,18 @@ function showCard(selectedCard) {
 function addToOpenList(selectedCard) {
     openedCards.push(selectedCard);
     console.log(openedCards);
+}
+
+function cardsMatched(card_1, card_2){
+    card_1.setAttribute('class', 'card show open match');
+    card_2.setAttribute('class', 'card show open match');
+    openedCards = [];
+}
+
+function cardsUnmatched(card_1, card_2) {
+    card_1.removeAttribute('class');
+    card_1.setAttribute('class', 'card');
+    card_2.removeAttribute('class');
+    card_2.setAttribute('class', 'card');
+    openedCards = [];
 }
