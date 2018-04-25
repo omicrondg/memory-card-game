@@ -3,6 +3,9 @@
  */
 const deck = document.querySelector('.deck');
 const cards = document.querySelectorAll('.card');
+const stars = document.querySelector('.stars');
+const moves = document.querySelector('.moves');
+const restart = document.querySelector('.restart');
 
 const diamond = "fa fa-diamond";
 const plane = "fa fa-paper-plane-o";
@@ -22,7 +25,7 @@ const cardList = [diamond, diamond, plane, plane, anchor, anchor, bicycle, bicyc
 *   - add each card's HTML to the page
 */
 
-//cards.forEach(element => element.setAttribute("class", "card show"));
+restart.addEventListener('click', event => { restartGame(); });
 
 function fillCards(){
     let shuffledCards = shuffle(cardList);
@@ -40,6 +43,11 @@ function clearDesc(){
     cards.forEach(element => element.firstChild.remove());
 }
 
+function restartGame(){
+    clearDesc();
+    fillCards();
+}
+
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -54,8 +62,6 @@ function shuffle(array) {
 
     return array;
 }
-
-
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -67,25 +73,29 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 let openedCards = [];
+let delayShow = 1500;
+
+let movesConter = 0;
+
+
 
 function clickCard(event) {
     let selectedCard = event.target;
     showCard(selectedCard);
     addToOpenList(selectedCard);
+    setTimeout(function(){
+        if (openedCards.length !== 0 && openedCards.length > 1) {
+            let card_1 = openedCards[0].firstElementChild.getAttribute('class');
+            let card_2 = openedCards[1].firstElementChild.getAttribute('class');
 
-    if (openedCards.length !== 0 && openedCards.length > 1) {
-        let card_1 = openedCards[0].firstElementChild.getAttribute('class');
-        let card_2 = openedCards[1].firstElementChild.getAttribute('class');
-
-        if (card_1 === card_2) cardsMatched(openedCards[0], openedCards[1]);
-        else cardsUnmatched(openedCards[0], openedCards[1]);
-
-        
-    }
+            if (card_1 === card_2) cardsMatched(openedCards[0], openedCards[1]);
+            else cardsUnmatched(openedCards[0], openedCards[1]);
+        }
+    }, delayShow);
 }
 
 function showCard(selectedCard) {
-    selectedCard.setAttribute('class', 'card show open');
+    selectedCard.classList.add('show', 'open');
 }
 
 function addToOpenList(selectedCard) {
@@ -93,18 +103,26 @@ function addToOpenList(selectedCard) {
     console.log(openedCards);
 }
 
+function matchCards(){
+    if (openedCards.length !== 0 && openedCards.length > 1) {
+        let card_1 = openedCards[0].firstElementChild.getAttribute('class');
+        let card_2 = openedCards[1].firstElementChild.getAttribute('class');
+
+        if (card_1 === card_2) cardsMatched(openedCards[0], openedCards[1]);
+        else cardsUnmatched(openedCards[0], openedCards[1]);
+    }
+}
+
 function cardsMatched(card_1, card_2){
-    card_1.setAttribute('class', 'card show open match');
+    card_1.classList.add('match');
     card_1.removeEventListener('click', clickCard);
-    card_2.setAttribute('class', 'card show open match');
+    card_2.classList.add('match');
     card_2.removeEventListener('click', clickCard);
     openedCards = [];
 }
 
 function cardsUnmatched(card_1, card_2) {
-    card_1.removeAttribute('class');
-    card_1.setAttribute('class', 'card');
-    card_2.removeAttribute('class');
-    card_2.setAttribute('class', 'card');
+    card_1.classList.remove('show', 'open');
+    card_2.classList.remove('show', 'open');
     openedCards = [];
 }
