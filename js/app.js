@@ -76,22 +76,23 @@ function shuffle(array) {
 let openedCards = [];
 let delayShow = 800;
 
-let movesConter = 0;
+let movesCounter = 0;
+let matchCounter = 16;
 
 let timerCounter = 0;
 let timerState = false;
-let one_second = 1000;
-let one_minute = one_second * 60;
-let one_hour = one_minute * 60;
-let startDate = new Date();
+let second = 1000;
+let minute = second * 60;
+let hour = minute * 60;
+let startDate;
 
 function clickCard(event) {
     let selectedCard = event.target;
 
     if(timerState === false){
         timerState = true;
-        setInterval(startTimer, 1000 / 60);
-        setTimeout(startTimer, 2000);
+        startDate = new Date();
+        timerCounter = window.setInterval(startTimer, 1000 / 60);
     }
 
     if (openedCards.length < 2){
@@ -138,21 +139,26 @@ function cardsUnmatched(card_1, card_2) {
     setTimeout(function(){
         card_1.classList.remove('show', 'open', 'unmatch');
         card_2.classList.remove('show', 'open', 'unmatch');
-    }, 500);
+    }, 800);
     
     openedCards = [];
 }
 
 function startTimer() {
-    let now = new Date()
-        , elapsed = now - startDate
-        , parts = [];
+    let now = new Date();
+    let elapsed = now - startDate;
+    let parts = [];
 
-    parts[0] = '' + Math.floor((elapsed % one_hour) / one_minute);
-    parts[1] = '' + Math.floor(((elapsed % one_hour) % one_minute) / one_second);
+    parts[0] = '' + Math.floor((elapsed % hour) / minute);
+    parts[1] = '' + Math.floor(((elapsed % hour) % minute) / second);
 
     parts[0] = (parts[0].length == 1) ? '0' + parts[0] : parts[0];
     parts[1] = (parts[1].length == 1) ? '0' + parts[1] : parts[1];
 
     timer.innerText = parts.join(':');
+}
+
+function stopTimer(){
+    timerState = false;
+    window.clearInterval(timerCounter);
 }
