@@ -6,6 +6,7 @@ const cards = document.querySelectorAll('.card');
 const stars = document.querySelector('.stars');
 const moves = document.querySelector('.moves');
 const restart = document.querySelector('.restart');
+const timer = document.querySelector('.timer');
 
 const diamond = "fa fa-diamond";
 const plane = "fa fa-paper-plane-o";
@@ -73,26 +74,34 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 let openedCards = [];
-let delayShow = 1000;
+let delayShow = 800;
 
 let movesConter = 0;
 
-
+let timerCounter = 0;
+let timerState = false;
+let one_second = 1000;
+let one_minute = one_second * 60;
+let one_hour = one_minute * 60;
+let startDate = new Date();
 
 function clickCard(event) {
     let selectedCard = event.target;
-    showCard(selectedCard);
-    addToOpenList(selectedCard);
-    setTimeout(function(){
-        if (openedCards.length !== 0 && openedCards.length > 1) {
-            let card_1 = openedCards[0].firstElementChild.getAttribute('class');
-            let card_2 = openedCards[1].firstElementChild.getAttribute('class');
 
-            if (card_1 === card_2) cardsMatched(openedCards[0], openedCards[1]);
-            else cardsUnmatched(openedCards[0], openedCards[1]);
-        }
-    }, delayShow);
+    if(timerState === false){
+        timerState = true;
+        setInterval(startTimer, 1000 / 60);
+        setTimeout(startTimer, 2000);
+    }
+
+    if (openedCards.length < 2){
+        showCard(selectedCard);
+        addToOpenList(selectedCard);
+    }
+
+    setTimeout(matchCards, delayShow);
 }
+
 
 function showCard(selectedCard) {
     selectedCard.classList.add('show', 'open');
@@ -100,7 +109,6 @@ function showCard(selectedCard) {
 
 function addToOpenList(selectedCard) {
     openedCards.push(selectedCard);
-    console.log(openedCards);
 }
 
 function matchCards(){
@@ -133,4 +141,18 @@ function cardsUnmatched(card_1, card_2) {
     }, 500);
     
     openedCards = [];
+}
+
+function startTimer() {
+    let now = new Date()
+        , elapsed = now - startDate
+        , parts = [];
+
+    parts[0] = '' + Math.floor((elapsed % one_hour) / one_minute);
+    parts[1] = '' + Math.floor(((elapsed % one_hour) % one_minute) / one_second);
+
+    parts[0] = (parts[0].length == 1) ? '0' + parts[0] : parts[0];
+    parts[1] = (parts[1].length == 1) ? '0' + parts[1] : parts[1];
+
+    timer.innerText = parts.join(':');
 }
