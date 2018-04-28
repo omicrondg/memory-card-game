@@ -116,8 +116,10 @@ function matchCards(){
 function cardsMatched(card_1, card_2){
     card_1.classList.add('match');
     card_1.removeEventListener('click', clickCard);
+    
     card_2.classList.add('match');
     card_2.removeEventListener('click', clickCard);
+
     openedCards = [];
 }
 
@@ -128,7 +130,7 @@ function cardsUnmatched(card_1, card_2) {
     setTimeout(function(){
         card_1.classList.remove('show', 'open', 'unmatch');
         card_2.classList.remove('show', 'open', 'unmatch');
-    }, 500)
+    }, 500);
     
     openedCards = [];
 }

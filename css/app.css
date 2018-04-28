@@ -89,8 +89,10 @@ h1 {
  */
 
 .score-panel {
-    text-align: left;
-    width: 345px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 445px;
     margin-bottom: 10px;
 }
 
@@ -107,10 +109,9 @@ h1 {
 }
 
 .score-panel .restart {
-    float: right;
     cursor: pointer;
 }
 
 .win {
-    color: gold;
+    color: #ecc235;
 }
