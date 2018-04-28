@@ -73,7 +73,7 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 let openedCards = [];
-let delayShow = 1500;
+let delayShow = 1000;
 
 let movesConter = 0;
 
@@ -122,7 +122,13 @@ function cardsMatched(card_1, card_2){
 }
 
 function cardsUnmatched(card_1, card_2) {
-    card_1.classList.remove('show', 'open');
-    card_2.classList.remove('show', 'open');
+    card_1.classList.add('unmatch');
+    card_2.classList.add('unmatch');
+
+    setTimeout(function(){
+        card_1.classList.remove('show', 'open', 'unmatch');
+        card_2.classList.remove('show', 'open', 'unmatch');
+    }, 500)
+    
     openedCards = [];
 }
