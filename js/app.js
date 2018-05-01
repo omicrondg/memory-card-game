@@ -26,17 +26,16 @@ const cardList = [diamond, diamond, plane, plane, anchor, anchor, bicycle, bicyc
 *   - add each card's HTML to the page
 */
 
-restart.addEventListener('click', event => { restartGame(); });
 
 function fillCards(){
     let shuffledCards = shuffle(cardList);
-
+    
     for(let e = 0; e < cards.length; e++){
         let i = document.createElement('i');
         i.setAttribute("class", `${shuffledCards[e]}`);
         cards[e].appendChild(i);
     }
-
+    
     cards.forEach(e => e.addEventListener('click', clickCard));
 }
 
@@ -45,9 +44,15 @@ function clearDesc(){
 }
 
 function restartGame(){
+    cards.forEach(e => e.classList.remove('show', 'open', 'match'));
+    moves.innerText = 0;
+    resetTimer();
+    
     clearDesc();
     fillCards();
 }
+
+restart.addEventListener('click', event => { restartGame(); });
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -76,7 +81,7 @@ function shuffle(array) {
 let openedCards = [];
 let delayShow = 800;
 
-let movesCounter = 0;
+let movesCounter = movesCount();
 let matchCounter = 16;
 
 let timerCounter = 0;
@@ -88,7 +93,7 @@ let startDate;
 
 function clickCard(event) {
     let selectedCard = event.target;
-
+    moves.innerText = movesCounter();
     if(timerState === false){
         timerState = true;
         startDate = new Date();
@@ -100,7 +105,7 @@ function clickCard(event) {
         addToOpenList(selectedCard);
     }
 
-    setTimeout(matchCards, delayShow);
+    window.setTimeout(matchCards, delayShow);
 }
 
 
@@ -113,12 +118,17 @@ function addToOpenList(selectedCard) {
 }
 
 function matchCards(){
-    if (openedCards.length !== 0 && openedCards.length > 1) {
-        let card_1 = openedCards[0].firstElementChild.getAttribute('class');
-        let card_2 = openedCards[1].firstElementChild.getAttribute('class');
-
-        if (card_1 === card_2) cardsMatched(openedCards[0], openedCards[1]);
-        else cardsUnmatched(openedCards[0], openedCards[1]);
+    if(matchCounter !== 0){
+        if (openedCards.length !== 0 && openedCards.length > 1) {
+            let card_1 = openedCards[0].firstElementChild.getAttribute('class');
+            let card_2 = openedCards[1].firstElementChild.getAttribute('class');
+    
+            if (card_1 === card_2) cardsMatched(openedCards[0], openedCards[1]);
+            else cardsUnmatched(openedCards[0], openedCards[1]);
+        }
+    } else {
+        stopTimer();
+        win();
     }
 }
 
@@ -129,6 +139,7 @@ function cardsMatched(card_1, card_2){
     card_2.classList.add('match');
     card_2.removeEventListener('click', clickCard);
 
+    matchCounter -= 2;
     openedCards = [];
 }
 
@@ -161,4 +172,21 @@ function startTimer() {
 function stopTimer(){
     timerState = false;
     window.clearInterval(timerCounter);
+}
+
+function resetTimer(){
+    timer.innerText = "00:00";
+}
+
+function movesCount(){
+    currCounter = 0;
+
+    return function(){
+        return currCounter++;
+    }
+}
+
+function win(){
+    stopTimer();
+    alert(movesCounter());
 }
