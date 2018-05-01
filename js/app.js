@@ -45,14 +45,15 @@ function clearDesc(){
 
 function restartGame(){
     cards.forEach(e => e.classList.remove('show', 'open', 'match'));
-    moves.innerText = 0;
-    resetTimer();
+    moves.innerText = "0";
+    stars.forEach(e => e.classList.remove('win'));
     
+    resetTimer();
     clearDesc();
     fillCards();
 }
 
-restart.addEventListener('click', event => { restartGame(); });
+restart.addEventListener('click', event => { restartGame; });
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -118,29 +119,29 @@ function addToOpenList(selectedCard) {
 }
 
 function matchCards(){
-    if(matchCounter !== 0){
-        if (openedCards.length !== 0 && openedCards.length > 1) {
-            let card_1 = openedCards[0].firstElementChild.getAttribute('class');
-            let card_2 = openedCards[1].firstElementChild.getAttribute('class');
-    
-            if (card_1 === card_2) cardsMatched(openedCards[0], openedCards[1]);
-            else cardsUnmatched(openedCards[0], openedCards[1]);
-        }
-    } else {
-        stopTimer();
-        win();
+    if (openedCards.length !== 0 && openedCards.length > 1) {
+        let card_1 = openedCards[0].firstElementChild.getAttribute('class');
+        let card_2 = openedCards[1].firstElementChild.getAttribute('class');
+        
+        if (card_1 === card_2) cardsMatched(openedCards[0], openedCards[1]);
+        else cardsUnmatched(openedCards[0], openedCards[1]);
     }
 }
 
 function cardsMatched(card_1, card_2){
+    matchCounter -= 2;
     card_1.classList.add('match');
     card_1.removeEventListener('click', clickCard);
     
     card_2.classList.add('match');
     card_2.removeEventListener('click', clickCard);
-
-    matchCounter -= 2;
+    
     openedCards = [];
+    
+    if (matchCounter === 0) {
+        stopTimer();
+        win();
+    }
 }
 
 function cardsUnmatched(card_1, card_2) {
@@ -188,5 +189,38 @@ function movesCount(){
 
 function win(){
     stopTimer();
-    alert(movesCounter());
+    getScore();
+    JSalert();
 }
+
+function getScore(){
+    totalTime = timer.innerText;
+    let min = Number(totalTime.split(':')[0]);
+    let sec = Number(totalTime.split(':')[1]);
+    if (movesCount < 20 && sec < 30) {
+        stars.forEach(e => e.classList.add('win'));
+    } else if (movesCount > 20 && movesCount < 40 && sec > 30 && sec < 50) {
+        stars[0].classList.add('win');
+        stars[1].classList.add('win');
+    } else {
+        stars[0].classList.add('win');
+    }
+}
+
+function JSalert() {
+    swal({
+            title: "You Won!",
+            text: `Your Score: ${stars}, Moves: ${movesCount}, Time: ${timer.innerText}`,
+            icon: "success",
+            buttons: ["No thank you!", "Play again!"],
+            dangerMode: true,
+        })
+        .then((isConfirm) => {
+            if (isConfirm) {
+                restartGame();
+            } else {
+                swal("Good By!");
+            }
+        });
+}
+
