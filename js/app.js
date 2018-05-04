@@ -25,8 +25,6 @@ const cardList = [diamond, diamond, plane, plane, anchor, anchor, bicycle, bicyc
 *   - loop through each card and create its HTML
 *   - add each card's HTML to the page
 */
-
-
 function fillCards(){
     let shuffledCards = shuffle(cardList);
     
@@ -37,6 +35,7 @@ function fillCards(){
     }
     
     cards.forEach(e => e.addEventListener('click', clickCard));
+    stars.forEach(e => e.classList.add('win'));
 }
 
 function clearDesc(){
@@ -44,10 +43,11 @@ function clearDesc(){
 }
 
 function restartGame(){
+    stars.forEach(e => e.classList.add('win'));
     cards.forEach(e => e.classList.remove('show', 'open', 'match'));
-    stars.forEach(e => e.classList.remove('win'));
     moves.innerText = "0";
     movesCounter = movesCount();
+    matchCounter = 8;
     stopTimer();
     resetTimer();
     clearDesc();
@@ -95,18 +95,17 @@ let startDate;
 
 function clickCard(event) {
     let selectedCard = event.target;
-    moves.innerText = movesCounter();
     if(timerState === false){
         timerState = true;
         startDate = new Date();
         timerCounter = window.setInterval(startTimer, 1000 / 60);
     }
-
+    
     if (openedCards.length < 2){
         showCard(selectedCard);
         addToOpenList(selectedCard);
     }
-
+    getScore();
     window.setTimeout(matchCards, delayShow);
 }
 
@@ -131,6 +130,8 @@ function matchCards(){
 
 function cardsMatched(card_1, card_2){
     --matchCounter;
+    moves.innerText = movesCounter();
+
     card_1.classList.add('match');
     card_1.removeEventListener('click', clickCard);
     
@@ -145,6 +146,7 @@ function cardsMatched(card_1, card_2){
 }
 
 function cardsUnmatched(card_1, card_2) {
+    moves.innerText = movesCounter();
     card_1.classList.add('unmatch');
     card_2.classList.add('unmatch');
 
@@ -180,7 +182,7 @@ function resetTimer(){
 }
 
 function movesCount(){
-    currCounter = 0;
+    currCounter = 1;
 
     return function(){
         return currCounter++;
@@ -193,34 +195,39 @@ function endGame(){
 }
 
 let winStars;
+let title;
+let score = 0;
 function getScore(){
-    totalTime = timer.innerText;
-    let min = Number(totalTime.split(':')[0]);
-    let sec = Number(totalTime.split(':')[1]);
     let totalMoves = Number(moves.innerText);
 
-console.log(totalMoves);
-console.log(min + ":" + sec);
-
-    if (totalMoves <= 25 && sec <= 25) {
-        stars.forEach(e => e.classList.add('win'));
+    if (totalMoves <= 14) {
         winStars = "img/three_stars.png";
-    } else if (totalMoves > 25 && totalMoves <= 50 && sec > 25 && sec <= 60) {
-        stars[0].classList.add('win');
-        stars[1].classList.add('win');
+        title = "You Won!";
+        score = 3;
+    } else if (totalMoves > 14 && totalMoves <= 18) {
+        stars[2].classList.remove('win');
         winStars = "img/two_stars.png";
-    } else {
-        stars[0].classList.add('win');
+        title = "Good!";
+        score = 2;
+    } else if (totalMoves > 18 && totalMoves <= 24) {
+        stars[2].classList.remove('win');
+        stars[1].classList.remove('win');
         winStars = "img/one_star.png";
+        title = "You can better...";
+        score = 1;
+    } else {
+        stars.forEach(e => e.classList.remove('win'));
+        winStars = "success";
+        title = "There, there...";
     }
 }
 
-
+//Show alert with game results and ask for play again
 function JSalert() {
     getScore();
     swal({
-            title: "You Won!",
-            text: `Moves: ${moves.innerText}, Time: ${timer.innerText}`,
+            title: title,
+            text: `Your Score is: ${score}, Moves: ${moves.innerText}, Time: ${timer.innerText}`,
             icon: winStars,
             buttons: ["No thank you!", "Play again!"],
         })
