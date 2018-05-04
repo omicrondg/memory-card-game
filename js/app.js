@@ -3,7 +3,7 @@
  */
 const deck = document.querySelector('.deck');
 const cards = document.querySelectorAll('.card');
-const stars = document.querySelector('.stars');
+const stars = document.querySelector('.stars').querySelectorAll('.fa');
 const moves = document.querySelector('.moves');
 const restart = document.querySelector('.restart');
 const timer = document.querySelector('.timer');
@@ -47,13 +47,13 @@ function restartGame(){
     cards.forEach(e => e.classList.remove('show', 'open', 'match'));
     moves.innerText = "0";
     stars.forEach(e => e.classList.remove('win'));
-    
+    stopTimer();
     resetTimer();
     clearDesc();
     fillCards();
 }
 
-restart.addEventListener('click', event => { restartGame; });
+restart.addEventListener('click', event => { restartGame(); });
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -83,7 +83,7 @@ let openedCards = [];
 let delayShow = 800;
 
 let movesCounter = movesCount();
-let matchCounter = 16;
+let matchCounter = 8;
 
 let timerCounter = 0;
 let timerState = false;
@@ -129,7 +129,7 @@ function matchCards(){
 }
 
 function cardsMatched(card_1, card_2){
-    matchCounter -= 2;
+    --matchCounter;
     card_1.classList.add('match');
     card_1.removeEventListener('click', clickCard);
     
@@ -139,8 +139,7 @@ function cardsMatched(card_1, card_2){
     openedCards = [];
     
     if (matchCounter === 0) {
-        stopTimer();
-        win();
+        endGame();
     }
 }
 
@@ -151,7 +150,7 @@ function cardsUnmatched(card_1, card_2) {
     setTimeout(function(){
         card_1.classList.remove('show', 'open', 'unmatch');
         card_2.classList.remove('show', 'open', 'unmatch');
-    }, 800);
+    }, 500);
     
     openedCards = [];
 }
@@ -187,9 +186,8 @@ function movesCount(){
     }
 }
 
-function win(){
+function endGame(){
     stopTimer();
-    getScore();
     JSalert();
 }
 
@@ -197,9 +195,12 @@ function getScore(){
     totalTime = timer.innerText;
     let min = Number(totalTime.split(':')[0]);
     let sec = Number(totalTime.split(':')[1]);
-    if (movesCount < 20 && sec < 30) {
-        stars.forEach(e => e.classList.add('win'));
-    } else if (movesCount > 20 && movesCount < 40 && sec > 30 && sec < 50) {
+    let totalMoves = Number(moves.innerText);
+    if (totalMoves <= 25 && sec <= 25) {
+        for(let s of stars){
+            s.classList.add('win');
+        }
+    } else if (totalMoves > 25 && totalMoves <= 50 && sec > 25 && sec <= 60) {
         stars[0].classList.add('win');
         stars[1].classList.add('win');
     } else {
@@ -208,12 +209,13 @@ function getScore(){
 }
 
 function JSalert() {
+    getScore();
     swal({
             title: "You Won!",
-            text: `Your Score: ${stars}, Moves: ${movesCount}, Time: ${timer.innerText}`,
+            text: `Your Score: ${stars.length}, Moves: ${moves.innerText}, Time: ${timer.innerText}`,
             icon: "success",
             buttons: ["No thank you!", "Play again!"],
-            dangerMode: true,
+            dangerMode: false,
         })
         .then((isConfirm) => {
             if (isConfirm) {
