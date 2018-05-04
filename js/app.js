@@ -45,8 +45,9 @@ function clearDesc(){
 
 function restartGame(){
     cards.forEach(e => e.classList.remove('show', 'open', 'match'));
-    moves.innerText = "0";
     stars.forEach(e => e.classList.remove('win'));
+    moves.innerText = "0";
+    movesCounter = movesCount();
     stopTimer();
     resetTimer();
     clearDesc();
@@ -191,31 +192,37 @@ function endGame(){
     JSalert();
 }
 
+let winStars;
 function getScore(){
     totalTime = timer.innerText;
     let min = Number(totalTime.split(':')[0]);
     let sec = Number(totalTime.split(':')[1]);
     let totalMoves = Number(moves.innerText);
+
+console.log(totalMoves);
+console.log(min + ":" + sec);
+
     if (totalMoves <= 25 && sec <= 25) {
-        for(let s of stars){
-            s.classList.add('win');
-        }
+        stars.forEach(e => e.classList.add('win'));
+        winStars = "img/three_stars.png";
     } else if (totalMoves > 25 && totalMoves <= 50 && sec > 25 && sec <= 60) {
         stars[0].classList.add('win');
         stars[1].classList.add('win');
+        winStars = "img/two_stars.png";
     } else {
         stars[0].classList.add('win');
+        winStars = "img/one_star.png";
     }
 }
+
 
 function JSalert() {
     getScore();
     swal({
             title: "You Won!",
-            text: `Your Score: ${stars.length}, Moves: ${moves.innerText}, Time: ${timer.innerText}`,
-            icon: "success",
+            text: `Moves: ${moves.innerText}, Time: ${timer.innerText}`,
+            icon: winStars,
             buttons: ["No thank you!", "Play again!"],
-            dangerMode: false,
         })
         .then((isConfirm) => {
             if (isConfirm) {
