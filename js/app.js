@@ -227,6 +227,7 @@ function getScore(){
         stars.forEach(e => e.classList.remove('win'));
         winStars = "success";
         title = "Try Again...";
+        score = 0;
     }
 }
 
