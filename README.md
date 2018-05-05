@@ -7,14 +7,24 @@
 
 ## Instructions
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+To play the game, just begin from openning any card and ##"Let the game begin!" 
 
-To get started, open `js/app.js` and start building out the app's functionality
+Your score depends on count of your moves.
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+All game information, such as:
+* Score
+* Moves
+* Elapsed time
+shows on the top of the gameboard.
+
+Also if you whant to start the game from the beginning, you can click restart button in the top-right corner.
 
 ## Contributing
 
 This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
 
 For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Gratitude
+
+___Thanks for awesome alert window [SweetAlert.js](https://sweetalert.js.org/) team!___
