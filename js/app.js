@@ -48,6 +48,7 @@ function restartGame(){
     moves.innerText = "0";
     movesCounter = movesCount();
     matchCounter = 8;
+    openedCards = [];
     stopTimer();
     resetTimer();
     clearDesc();
