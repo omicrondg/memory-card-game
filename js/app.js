@@ -202,7 +202,7 @@ function getScore(){
 
     if (totalMoves <= 14) {
         winStars = "img/three_stars.png";
-        title = "You Won!";
+        title = "Exelent!";
         score = 3;
     } else if (totalMoves > 14 && totalMoves <= 18) {
         stars[2].classList.remove('win');
@@ -213,12 +213,12 @@ function getScore(){
         stars[2].classList.remove('win');
         stars[1].classList.remove('win');
         winStars = "img/one_star.png";
-        title = "You can better...";
+        title = "Not Bad.";
         score = 1;
     } else {
         stars.forEach(e => e.classList.remove('win'));
         winStars = "success";
-        title = "There, there...";
+        title = "Try Again...";
     }
 }
 
