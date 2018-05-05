@@ -157,6 +157,7 @@ function cardsUnmatched(card_1, card_2) {
     openedCards = [];
 }
 
+//Update moves counter in panel after user made moove
 function addMoves(){
     moves.innerText = movesCounter();
 }
