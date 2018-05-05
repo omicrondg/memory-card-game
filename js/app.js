@@ -95,6 +95,8 @@ let startDate;
 
 function clickCard(event) {
     let selectedCard = event.target;
+    selectedCard.removeEventListener('click', clickCard);
+
     if(timerState === false){
         timerState = true;
         startDate = new Date();
@@ -130,15 +132,14 @@ function matchCards(){
 
 function cardsMatched(card_1, card_2){
     addMoves();
-    --matchCounter;
-    card_1.classList.add('match');
-    card_1.removeEventListener('click', clickCard);
     
+    --matchCounter;
+    
+    card_1.classList.add('match');
     card_2.classList.add('match');
-    card_2.removeEventListener('click', clickCard);
     
     openedCards = [];
-    
+
     if (matchCounter === 0) {
         endGame();
     }
@@ -148,6 +149,8 @@ function cardsUnmatched(card_1, card_2) {
     addMoves();
     card_1.classList.add('unmatch');
     card_2.classList.add('unmatch');
+    card_1.addEventListener('click', clickCard);
+    card_2.addEventListener('click', clickCard);
 
     setTimeout(function(){
         card_1.classList.remove('show', 'open', 'unmatch');
