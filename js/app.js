@@ -96,6 +96,7 @@ let startDate;
 
 function clickCard(event) {
     let selectedCard = event.target;
+    if (openedCards.length < 2){
     selectedCard.removeEventListener('click', clickCard);
 
     if(timerState === false){
@@ -104,12 +105,11 @@ function clickCard(event) {
         timerCounter = window.setInterval(startTimer, 1000 / 60);
     }
     
-    if (openedCards.length < 2){
         showCard(selectedCard);
         addToOpenList(selectedCard);
+        getScore();
+        window.setTimeout(matchCards, delayShow);
     }
-    getScore();
-    window.setTimeout(matchCards, delayShow);
 }
 
 
