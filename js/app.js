@@ -129,9 +129,8 @@ function matchCards(){
 }
 
 function cardsMatched(card_1, card_2){
+    addMoves();
     --matchCounter;
-    moves.innerText = movesCounter();
-
     card_1.classList.add('match');
     card_1.removeEventListener('click', clickCard);
     
@@ -146,7 +145,7 @@ function cardsMatched(card_1, card_2){
 }
 
 function cardsUnmatched(card_1, card_2) {
-    moves.innerText = movesCounter();
+    addMoves();
     card_1.classList.add('unmatch');
     card_2.classList.add('unmatch');
 
@@ -156,6 +155,10 @@ function cardsUnmatched(card_1, card_2) {
     }, 500);
     
     openedCards = [];
+}
+
+function addMoves(){
+    moves.innerText = movesCounter();
 }
 
 function startTimer() {
