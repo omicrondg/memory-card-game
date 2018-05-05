@@ -18,7 +18,7 @@ All game information, such as:
 
 shows on the top of the gameboard.
 
-![Game Panel](https://github.com/omicrondg/memory-card-game/res/game-panel.png)
+![Game Panel](res/game-panel.png)
 
 Also if you whant to start the game from the beginning, you can click restart button in the top-right corner.
 
