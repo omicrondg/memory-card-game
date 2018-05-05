@@ -7,7 +7,7 @@
 
 ## Instructions
 
-To play the game, just begin from openning any card and ##"Let the game begin!" 
+To play the game, just begin from openning any card and __"Let the game begin!"__
 
 Your score depends on count of your moves.
 
@@ -15,8 +15,9 @@ All game information, such as:
 * Score
 * Moves
 * Elapsed time
-shows on the top of the gameboard.
 
+shows on the top of the gameboard.
+![](https://github.com/omicrondg/memory-card-game/GamePanel.png)
 Also if you whant to start the game from the beginning, you can click restart button in the top-right corner.
 
 ## Contributing
