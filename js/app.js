@@ -210,7 +210,7 @@ function getScore(){
 
     if (totalMoves <= 14) {
         winStars = "img/three_stars.png";
-        title = "Exelent!";
+        title = "Excellent!";
         score = 3;
     } else if (totalMoves > 14 && totalMoves <= 18) {
         stars[2].classList.remove('win');
